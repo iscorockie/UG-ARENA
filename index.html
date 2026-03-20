@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UGArena • Uganda Esports Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Barlow+Condensed:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+:root {
+  --gold: #F5C400;
+  --gold-dim: rgba(245,196,0,0.15);
+  --red: #D4001E;
+  --black: #060606;
+  --panel: #0f0f0f;
+  --panel2: #181818;
+  --panel3: #222222;
+  --border: rgba(245,196,0,0.12);
+  --border-bright: rgba(245,196,0,0.4);
+  --text: #F2EFE8;
+  --muted: #777;
+  --glow-gold: 0 0 30px rgba(245,196,0,0.4);
+  --glow-red: 0 0 30px rgba(212,0,30,0.4);
+  --radius: 16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Kente-weave background texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(245,196,0,0.025) 59px, rgba(245,196,0,0.025) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(245,196,0,0.025) 59px, rgba(245,196,0,0.025) 60px);
+}
+
+.wrap { max-width: 1320px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+/* ── UGANDA FLAG STRIPE ── */
+.flag-stripe { height: 7px; background: linear-gradient(90deg, #000 0 33.3%, var(--gold) 33.3% 66.6%, var(--red) 66.6% 100%); width: 100%; }
+
+/* ── NAVBAR ── */
+nav {
+  position: fixed; top: 7px; left: 0; right: 0; z-index: 200;
+  background: rgba(6,6,6,0.96); border-bottom: 2px solid var(--gold);
+  backdrop-filter: blur(16px);
+}
+.nav-wrap {
+  max-width: 1320px; margin: 0 auto; padding: 0 28px;
+  height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.logo-link { display: flex; align-items: center; gap: 14px; text-decoration: none; flex-shrink: 0; }
+.logo-emblem {
+  width: 50px; height: 50px; border-radius: 12px;
+  background: var(--gold); display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--glow-gold); flex-shrink: 0;
+}
+.logo-text-block { line-height: 1; }
+.logo-wordmark { font-family: 'Bebas Neue', cursive; font-size: 34px; color: var(--gold); letter-spacing: 3px; line-height: 1; text-shadow: var(--glow-gold); }
+.logo-sub { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 3px; margin-top: 3px; }
+
+.nav-links { display: flex; align-items: center; gap: 6px; }
+.nav-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  padding: 9px 18px; border-radius: 10px;
+  transition: all 0.2s; display: flex; align-items: center; gap: 9px;
+}
+.nav-btn:hover, .nav-btn.active { color: var(--gold); background: var(--gold-dim); }
+.nav-btn .live-pip { width: 8px; height: 8px; background: var(--red); border-radius: 50%; animation: blink 1.5s infinite; }
+
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.profile-pill {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--panel2); border: 1px solid var(--border);
+  padding: 7px 16px 7px 7px; border-radius: 100px; cursor: pointer;
+  transition: all 0.2s;
+}
+.profile-pill:hover { border-color: var(--gold); box-shadow: var(--glow-gold); }
+.avi {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold), var(--red));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', cursive; font-size: 15px; color: var(--black);
+}
+.p-name { font-size: 15px; font-weight: 800; color: var(--gold); line-height: 1.2; }
+.p-meta { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); }
+
+.btn-host {
+  background: var(--gold); color: var(--black); border: none; cursor: pointer;
+  font-family: 'Bebas Neue', cursive; font-size: 17px; letter-spacing: 2px;
+  padding: 12px 24px; border-radius: 12px;
+  display: flex; align-items: center; gap: 9px; flex-shrink: 0;
+  transition: all 0.2s;
+}
+.btn-host:hover { background: #fff; box-shadow: var(--glow-gold); transform: translateY(-2px); }
+
+/* ── LAYOUT ── */
+.main { padding-top: 95px; padding-bottom: 80px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeUp 0.3s ease; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; } }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+@keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+
+/* ── HERO ── */
+.hero {
+  position: relative; overflow: hidden; border-radius: 22px;
+  min-height: 580px; display: flex; align-items: flex-end;
+  margin-bottom: 32px; border: 1px solid rgba(245,196,0,0.2);
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+}
+.hero-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(6,6,6,0.98) 0%, rgba(6,6,6,0.75) 40%, rgba(6,6,6,0.3) 70%, rgba(6,6,6,0.1) 100%);
+}
+.hero-content { position: relative; z-index: 2; padding: 60px; width: 100%; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(245,196,0,0.12); border: 1px solid rgba(245,196,0,0.35);
+  padding: 9px 20px; border-radius: 100px; margin-bottom: 28px;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--gold);
+}
+.hero-badge-dot { width: 9px; height: 9px; background: var(--gold); border-radius: 50%; animation: blink 2s infinite; }
+
+.hero-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(72px, 11vw, 130px);
+  line-height: 0.93; letter-spacing: 2px; margin-bottom: 22px;
+}
+.ht-white { color: var(--text); display: block; }
+.ht-gold  { color: var(--gold); display: block; text-shadow: var(--glow-gold); }
+.ht-red   { color: var(--red);  display: block; }
+
+.hero-desc {
+  font-size: 20px; font-weight: 500; color: #bbb;
+  max-width: 560px; margin-bottom: 36px; line-height: 1.65;
+}
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+.btn-primary {
+  background: var(--gold); color: var(--black); border: none; cursor: pointer;
+  font-family: 'Bebas Neue', cursive; font-size: 19px; letter-spacing: 2px;
+  padding: 18px 38px; border-radius: 14px;
+  display: flex; align-items: center; gap: 12px; transition: all 0.2s;
+}
+.btn-primary:hover { background: #fff; box-shadow: var(--glow-gold); transform: translateY(-2px); }
+.btn-outline {
+  background: transparent; color: var(--text); cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.25); font-family: 'Bebas Neue', cursive;
+  font-size: 19px; letter-spacing: 2px; padding: 16px 38px; border-radius: 14px;
+  display: flex; align-items: center; gap: 12px; transition: all 0.2s;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+/* ── STATS BAR ── */
+.stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 52px; }
+.stat-card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 26px 20px; text-align: center;
+  position: relative; overflow: hidden; transition: all 0.25s; cursor: default;
+}
+.stat-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: var(--glow-gold); }
+.stat-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--red),var(--gold)); }
+.stat-num { font-family: 'Bebas Neue', cursive; font-size: 52px; color: var(--gold); line-height: 1; }
+.stat-lbl { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: var(--muted); margin-top: 8px; text-transform: uppercase; }
+
+/* ── SECTION HEADER ── */
+.sec-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px; padding-bottom: 18px; border-bottom: 1px solid var(--border);
+}
+.sec-title {
+  font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--text);
+  display: flex; align-items: center; gap: 14px; letter-spacing: 2px;
+}
+.sec-title span { color: var(--gold); }
+.sec-title svg { flex-shrink: 0; }
+
+/* ── GAME CARDS ROW ── */
+.game-chips { display: grid; grid-template-columns: repeat(6,1fr); gap: 14px; margin-bottom: 52px; }
+.game-chip {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 12px; text-align: center;
+  cursor: pointer; transition: all 0.22s; overflow: hidden; position: relative;
+}
+.game-chip::before {
+  content: ''; position: absolute; inset: 0; opacity: 0;
+  background: linear-gradient(135deg, var(--gold-dim), transparent);
+  transition: opacity 0.25s;
+}
+.game-chip:hover::before { opacity: 1; }
+.game-chip:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 16px 40px rgba(0,0,0,0.5), var(--glow-gold); }
+.game-chip-icon { width: 52px; height: 52px; margin: 0 auto 12px; display: block; }
+.game-chip-name { font-family: 'Bebas Neue', cursive; font-size: 17px; letter-spacing: 1.5px; display: block; margin-bottom: 2px; }
+.game-chip-sub { font-size: 12px; color: var(--muted); display: block; }
+
+/* ── TOURNAMENTS ── */
+.filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 26px; }
+.f-btn {
+  background: var(--panel2); color: var(--muted);
+  border: 1px solid var(--border); padding: 10px 22px;
+  border-radius: 100px; cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 1.5px;
+  transition: all 0.2s; text-transform: uppercase;
+}
+.f-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.3); }
+.f-btn.active { background: var(--gold); color: var(--black); border-color: var(--gold); }
+
+.t-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 22px; }
+
+.t-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: all 0.25s; }
+.t-card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.6), var(--glow-gold); }
+
+.t-banner {
+  height: 160px; position: relative; overflow: hidden;
+  background: #1a1a1a; display: flex; align-items: center; justify-content: center;
+}
+.t-banner img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; transition: transform 0.4s ease;
+  filter: brightness(0.6) saturate(1.1);
+}
+.t-card:hover .t-banner img { transform: scale(1.06); filter: brightness(0.75) saturate(1.3); }
+.t-banner-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(15,15,15,0.9) 0%, transparent 60%);
+}
+.t-banner-icon {
+  position: relative; z-index: 2;
+  width: 64px; height: 64px; filter: drop-shadow(0 2px 12px rgba(0,0,0,0.8));
+}
+
+.t-prize {
+  position: absolute; top: 12px; right: 12px; z-index: 3;
+  background: rgba(0,0,0,0.85); border: 1px solid var(--gold);
+  padding: 5px 12px; border-radius: 100px;
+  font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--gold);
+}
+.t-status {
+  position: absolute; top: 12px; left: 12px; z-index: 3;
+  padding: 5px 12px; border-radius: 100px;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: 1.5px;
+}
+.s-live     { background: var(--red); color: #fff; animation: blink 2s infinite; }
+.s-open     { background: rgba(0,210,100,0.92); color: #000; }
+.s-upcoming { background: rgba(245,196,0,0.2); color: var(--gold); border: 1px solid var(--gold); }
+
+.t-body { padding: 22px; }
+.t-game-tag {
+  font-family: 'Share Tech Mono', monospace; font-size: 13px;
+  color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 7px;
+}
+.t-name { font-family: 'Bebas Neue', cursive; font-size: 26px; letter-spacing: 1.5px; line-height: 1.1; margin-bottom: 14px; }
+.t-meta { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 16px; }
+.t-meta-item { display: flex; align-items: center; gap: 7px; font-size: 15px; color: #888; font-weight: 500; }
+.t-meta-item svg { flex-shrink: 0; }
+
+.prog-track { background: #222; border-radius: 100px; height: 7px; margin-bottom: 8px; overflow: hidden; }
+.prog-fill   { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--gold), var(--red)); transition: width 0.6s ease; }
+.prog-lbl    { font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+
+.btn-join {
+  width: 100%; background: var(--gold); color: var(--black); border: none; cursor: pointer;
+  font-family: 'Bebas Neue', cursive; font-size: 18px; letter-spacing: 2px;
+  padding: 15px; border-radius: 12px; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-join:hover { background: #fff; box-shadow: var(--glow-gold); }
+.btn-join.full { background: #252525; color: #555; cursor: not-allowed; }
+.btn-join.full:hover { background: #252525; box-shadow: none; }
+.btn-join.watch { background: var(--red); color: #fff; }
+.btn-join.watch:hover { background: #ff1a3d; box-shadow: var(--glow-red); }
+
+/* ── LIVE ── */
+.live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 20px; }
+.live-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; cursor: pointer; transition: all 0.25s; }
+.live-card:hover { border-color: var(--red); transform: translateY(-5px); box-shadow: var(--glow-red); }
+.live-thumb { height: 190px; position: relative; overflow: hidden; background: #1a1a1a; }
+.live-thumb img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65); transition: transform 0.4s; }
+.live-card:hover .live-thumb img { transform: scale(1.05); }
+.live-badge-overlay {
+  position: absolute; top: 14px; left: 14px;
+  background: var(--red); color: #fff;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 2px;
+  padding: 5px 13px; border-radius: 100px; animation: blink 2s infinite;
+}
+.live-viewers {
+  position: absolute; bottom: 14px; right: 14px;
+  background: rgba(0,0,0,0.82); border: 1px solid var(--border);
+  font-family: 'Share Tech Mono', monospace; font-size: 13px;
+  padding: 5px 12px; border-radius: 100px; display: flex; align-items: center; gap: 7px;
+}
+.live-body { padding: 18px; }
+.live-streamer { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 1px; margin-bottom: 5px; }
+.live-ttl { font-size: 15px; color: #ccc; margin-bottom: 6px; font-weight: 500; line-height: 1.4; }
+.live-meta { display: flex; gap: 14px; font-size: 14px; }
+.live-meta-g { color: var(--gold); font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; }
+.live-meta-l { color: var(--muted); }
+
+/* ── MATCHMAKING ── */
+.mm-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
+.mm-box { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 32px; }
+.mm-ttl { font-family: 'Bebas Neue', cursive; font-size: 34px; letter-spacing: 2px; margin-bottom: 6px; }
+.mm-sub { font-size: 17px; color: var(--muted); margin-bottom: 28px; font-weight: 500; }
+.mm-lbl { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 2px; color: var(--gold); margin-bottom: 9px; text-transform: uppercase; }
+.mm-input, .mm-select {
+  width: 100%; background: var(--black); border: 1px solid var(--border); color: var(--text);
+  padding: 14px 18px; border-radius: 12px; font-family: 'Barlow', sans-serif; font-size: 17px; outline: none;
+  transition: border-color 0.2s; margin-bottom: 20px;
+}
+.mm-input:focus, .mm-select:focus { border-color: var(--gold); }
+.mm-select option { background: #111; }
+
+.game-sel { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 28px; }
+.gopt {
+  background: var(--panel2); border: 2px solid var(--border);
+  border-radius: 14px; padding: 18px 10px; text-align: center; cursor: pointer; transition: all 0.2s;
+}
+.gopt:hover, .gopt.sel { border-color: var(--gold); background: var(--gold-dim); }
+.gopt.sel { box-shadow: var(--glow-gold); }
+.gopt-icon { width: 42px; height: 42px; margin: 0 auto 10px; display: block; }
+.gopt-name { font-family: 'Bebas Neue', cursive; font-size: 16px; letter-spacing: 1px; }
+
+.btn-queue {
+  width: 100%; background: var(--red); color: #fff; border: none; cursor: pointer;
+  font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 3px;
+  padding: 20px; border-radius: 14px; transition: all 0.2s; margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+}
+.btn-queue:hover { background: #ff1a3d; box-shadow: var(--glow-red); transform: translateY(-2px); }
+
+.queue-box { display: none; margin-top: 22px; background: var(--black); border: 1px solid var(--gold); border-radius: 14px; padding: 24px; text-align: center; }
+.q-lbl { font-family: 'Share Tech Mono', monospace; font-size: 14px; color: var(--muted); letter-spacing: 2px; margin-bottom: 8px; }
+.q-timer { font-family: 'Bebas Neue', cursive; font-size: 52px; color: var(--gold); line-height: 1; }
+.q-players { font-size: 16px; color: var(--muted); margin-top: 6px; }
+.btn-cancel {
+  margin-top: 16px; background: none; border: 1px solid var(--red); color: var(--red);
+  padding: 10px 24px; border-radius: 10px; cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px;
+  letter-spacing: 1px; transition: all 0.2s;
+}
+.btn-cancel:hover { background: var(--red); color: #fff; }
+
+/* Leaderboard */
+.lb-row { display: flex; align-items: center; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--border); }
+.lb-rank { font-family: 'Bebas Neue', cursive; font-size: 24px; width: 32px; text-align: center; flex-shrink: 0; }
+.lb-rank.g { color: var(--gold); }
+.lb-rank.s { color: #d0d0d0; }
+.lb-rank.b { color: #cd7f32; }
+.lb-avi { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', cursive; font-size: 14px; color: var(--black); flex-shrink: 0; }
+.lb-info { flex: 1; }
+.lb-name { font-family: 'Bebas Neue', cursive; font-size: 20px; letter-spacing: 1px; line-height: 1.1; }
+.lb-city { font-size: 14px; color: var(--muted); font-weight: 500; }
+.lb-pts { font-family: 'Share Tech Mono', monospace; font-size: 15px; color: var(--gold); }
+
+/* ── MODALS ── */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 500; align-items: center; justify-content: center; padding: 24px; }
+.overlay.open { display: flex; }
+.modal {
+  background: var(--panel); border: 1px solid var(--gold); border-radius: 24px;
+  width: 100%; max-width: 580px; max-height: 92vh; overflow-y: auto; padding: 40px;
+  position: relative; animation: modalPop 0.3s cubic-bezier(.34,1.56,.64,1);
+  scrollbar-width: thin; scrollbar-color: var(--gold) var(--panel2);
+}
+@keyframes modalPop { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.modal-close { position: absolute; top: 18px; right: 22px; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 26px; line-height: 1; transition: color 0.2s; }
+.modal-close:hover { color: var(--text); }
+.modal-ttl { font-family: 'Bebas Neue', cursive; font-size: 30px; letter-spacing: 2px; margin-bottom: 4px; }
+.modal-sub { font-size: 18px; color: var(--gold); font-weight: 700; margin-bottom: 26px; }
+
+/* Steps */
+.steps { display: flex; align-items: center; margin-bottom: 32px; }
+.sdot { width: 40px; height: 40px; border-radius: 50%; background: var(--panel2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', cursive; font-size: 17px; transition: all 0.3s; flex-shrink: 0; }
+.sdot.active { background: var(--gold); color: var(--black); border-color: var(--gold); box-shadow: var(--glow-gold); }
+.sdot.done { background: #00cc66; color: var(--black); border-color: #00cc66; }
+.sline { flex: 1; height: 2px; background: var(--border); transition: background 0.3s; }
+.sline.done { background: #00cc66; }
+
+.reg-step { display: none; }
+.reg-step.active { display: block; animation: fadeUp 0.3s ease; }
+
+.rules-box { background: var(--black); border: 1px solid var(--border); border-radius: 14px; padding: 22px; max-height: 230px; overflow-y: auto; margin-bottom: 22px; scrollbar-width: thin; scrollbar-color: var(--gold) transparent; }
+.rules-box p { font-size: 16px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 500; }
+.rules-box p:last-child { border-bottom: none; }
+.rules-highlight { color: var(--gold); font-weight: 700; margin-top: 10px; }
+
+.form-check { display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 17px; font-weight: 600; margin-bottom: 22px; }
+.form-check input { width: 20px; height: 20px; accent-color: var(--gold); }
+
+.flbl { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 2px; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; }
+.finput, .fselect {
+  width: 100%; background: var(--black); border: 1px solid var(--border); color: var(--text);
+  padding: 14px 18px; border-radius: 12px; font-family: 'Barlow', sans-serif; font-size: 17px; outline: none;
+  transition: border-color 0.2s; margin-bottom: 18px;
+}
+.finput:focus, .fselect:focus { border-color: var(--gold); }
+.fselect option { background: #111; }
+.fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.btn-mgo {
+  flex: 1; background: var(--gold); color: var(--black); border: none; cursor: pointer;
+  font-family: 'Bebas Neue', cursive; font-size: 18px; letter-spacing: 2px;
+  padding: 16px; border-radius: 12px; transition: all 0.2s;
+}
+.btn-mgo:hover { background: #fff; }
+.btn-mgo:disabled { background: #2a2a2a; color: #555; cursor: not-allowed; }
+.btn-mback {
+  flex: 1; background: transparent; color: var(--text); cursor: pointer;
+  border: 1px solid var(--border); font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 18px; letter-spacing: 1px;
+  padding: 16px; border-radius: 12px; transition: all 0.2s;
+}
+.btn-mback:hover { border-color: var(--text); }
+.modal-btns { display: flex; gap: 14px; margin-top: 22px; }
+
+/* Success */
+.success { text-align: center; padding: 20px 0; }
+.success-icon { margin-bottom: 18px; }
+.success-ttl { font-family: 'Bebas Neue', cursive; font-size: 36px; color: var(--gold); margin-bottom: 12px; letter-spacing: 2px; }
+.success-msg { font-size: 18px; color: #aaa; margin-bottom: 8px; }
+.success-sub { font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+.momo-box { background: var(--black); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 26px; text-align: left; }
+.momo-lbl { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; }
+.momo-val { font-size: 16px; color: #aaa; font-weight: 500; }
+.btn-success { width: 100%; background: var(--gold); color: var(--black); border: none; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 20px; letter-spacing: 2px; padding: 18px; border-radius: 14px; transition: all 0.2s; }
+.btn-success:hover { background: #fff; box-shadow: var(--glow-gold); }
+
+/* Footer */
+footer { background: var(--panel); border-top: 1px solid var(--border); padding: 36px 0; }
+.footer-inner { max-width: 1320px; margin: 0 auto; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+.footer-logo { font-family: 'Bebas Neue', cursive; font-size: 30px; color: var(--gold); letter-spacing: 3px; }
+.footer-sub { font-size: 16px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+.footer-right { text-align: right; font-size: 16px; color: var(--muted); font-weight: 500; }
+.footer-right b { color: var(--gold); }
+
+/* Responsive */
+@media(max-width:900px) {
+  .hero-content { padding: 36px 28px; }
+  .stats-bar { grid-template-columns: repeat(2,1fr); }
+  .game-chips { grid-template-columns: repeat(3,1fr); }
+  .mm-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .logo-sub { display: none; }
+  .fgrid { grid-template-columns: 1fr; }
+}
+@media(max-width:600px) {
+  .t-grid { grid-template-columns: 1fr; }
+  .game-chips { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="flag-stripe"></div>
+
+<!-- ══ NAVBAR ══ -->
+<nav>
+  <div class="nav-wrap">
+    <a class="logo-link">
+      <!-- Uganda Crested Crane SVG emblem -->
+      <div class="logo-emblem">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 3C15 3 12 6 11 9C10 12 12 13 14 12C14 12 13 15 11 17C9 19 7 18 6 20C5 22 7 24 10 23C10 23 9 25 10 27H15H20C21 25 20 23 20 23C23 24 25 22 24 20C23 18 21 19 19 17C17 15 16 12 16 12C18 13 20 12 19 9C18 6 15 3 15 3Z" fill="#060606"/>
+          <circle cx="15" cy="5" r="2.5" fill="#060606"/>
+          <path d="M13 9L10 14L12 15L14 11L15 14L16 11L18 15L20 14L17 9H13Z" fill="#060606" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="logo-text-block">
+        <div class="logo-wordmark">UGARENA</div>
+        <div class="logo-sub">KAMPALA • ESPORTS HUB</div>
+      </div>
+    </a>
+
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="switchTab('home',this)" id="nb-home">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        HOME
+      </button>
+      <button class="nav-btn" onclick="switchTab('tournaments',this)" id="nb-tournaments">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        TOURNAMENTS
+      </button>
+      <button class="nav-btn" onclick="switchTab('live',this)" id="nb-live">
+        <span class="live-pip"></span>
+        LIVE
+      </button>
+      <button class="nav-btn" onclick="switchTab('matchmaking',this)" id="nb-matchmaking">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z"/></svg>
+        MATCHMAKING
+      </button>
+    </div>
+
+    <div class="nav-right">
+      <div class="profile-pill">
+        <div class="avi">RN</div>
+        <div>
+          <div class="p-name">Ronnie254</div>
+          <div class="p-meta">Kampala · 1,420 pts</div>
+        </div>
+      </div>
+      <button class="btn-host" onclick="openCreate()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/></svg>
+        HOST
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+<div class="wrap">
+
+  <!-- ══ HOME TAB ══ -->
+  <div class="tab-content active" id="tab-home">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          UGANDA'S #1 ESPORTS NETWORK
+        </div>
+        <h1 class="hero-title">
+          <span class="ht-white">CONNECT.</span>
+          <span class="ht-gold">COMPETE.</span>
+          <span class="ht-red">CONQUER.</span>
+        </h1>
+        <p class="hero-desc">
+          From Kampala to Jinja, Gulu to Mbarara — host tournaments, 
+          watch live battles, and prove Uganda runs East African esports.
+        </p>
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="switchTab('tournaments',document.getElementById('nb-tournaments'))">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+            BROWSE TOURNAMENTS
+          </button>
+          <button class="btn-outline" onclick="switchTab('matchmaking',document.getElementById('nb-matchmaking'))">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z"/></svg>
+            QUICK MATCH
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-num" id="s-tourn">0</div>
+        <div class="stat-lbl">Tournaments Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="s-matches">0</div>
+        <div class="stat-lbl">Live Matches</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">8.2M</div>
+        <div class="stat-lbl">UGX Prize Pool</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">🇺🇬</div>
+        <div class="stat-lbl">Uganda First</div>
+      </div>
+    </div>
+
+    <!-- POPULAR GAMES -->
+    <div class="sec-head" style="margin-top:8px;">
+      <div class="sec-title">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="var(--gold)"><path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z"/></svg>
+        <span>POPULAR</span> GAMES
+      </div>
+    </div>
+    <div class="game-chips">
+      <div class="game-chip" onclick="switchTab('tournaments',document.getElementById('nb-tournaments'))">
+        <svg class="game-chip-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="sw1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C400"/><stop offset="100%" style="stop-color:#D4001E"/></linearGradient></defs>
+          <path d="M35 15 L45 25 L35 45 L20 50 L35 55 L45 75 L50 90 L55 75 L65 55 L80 50 L65 45 L55 25 L65 15 L50 10 Z" fill="url(#sw1)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+          <rect x="46" y="8" width="8" height="84" rx="4" fill="url(#sw1)" opacity="0.6"/>
+          <ellipse cx="50" cy="8" rx="6" ry="4" fill="#F5C400"/>
+        </svg>
+        <span class="game-chip-name">MLBB</span>
+        <span class="game-chip-sub">Mobile Legends</span>
+      </div>
+      <div class="game-chip" onclick="switchTab('tournaments',document.getElementById('nb-tournaments'))">
+        <svg class="game-chip-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="fb1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#22c55e"/><stop offset="100%" style="stop-color:#15803d"/></linearGradient></defs>
+          <circle cx="50" cy="50" r="44" fill="url(#fb1)" stroke="white" stroke-width="3"/>
+          <path d="M50 10 C30 20 20 40 22 55 C24 70 35 80 50 85 C65 80 76 70 78 55 C80 40 70 20 50 10Z" fill="none" stroke="white" stroke-width="2.5"/>
+          <path d="M22 55 Q36 60 50 55 Q64 60 78 55" fill="none" stroke="white" stroke-width="2.5"/>
+          <path d="M36 12 Q40 30 38 55 Q40 72 45 85" fill="none" stroke="white" stroke-width="2.5"/>
+          <path d="M64 12 Q60 30 62 55 Q60 72 55 85" fill="none" stroke="white" stroke-width="2.5"/>
+        </svg>
+        <span class="game-chip-name">EA FC 25</span>
+        <span class="game-chip-sub">EA Sports FC</span>
+      </div>
+      <div class="game-chip" onclick="switchTab('tournaments',document.getElementById('nb-tournaments'))">
+        <svg class="game-chip-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="gn1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ef4444"/><stop offset="100%" style="stop-color:#7f1d1d"/></linearGradient></defs>
+          <rect x="10" y="40" width="65" height="22" rx="6" fill="url(#gn1)"/>
+          <rect x="70" y="44" width="20" height="14" rx="3" fill="#b91c1c"/>
+          <rect x="8" y="43" width="12" height="16" rx="4" fill="#dc2626"/>
+          <circle cx="50" cy="51" r="5" fill="none" stroke="#fca5a5" stroke-width="2"/>
+          <line x1="50" y1="40" x2="50" y2="44" stroke="#fca5a5" stroke-width="2"/>
+          <line x1="50" y1="58" x2="50" y2="62" stroke="#fca5a5" stroke-width="2"/>
+          <line x1="39" y1="51" x2="43" y2="51" stroke="#fca5a5" stroke-width="2"/>
+          <line x1="57" y1="51" x2="61" y2="51" stroke="#fca5a5" stroke-width="2"/>
+        </svg>
+        <span class="game-chip-name">COD MOBILE</span>
+        <span class="game-chip-sub">Call of Duty</span>
+      </div>
+      <div class="game-chip" onclick="switchTab('tournaments',document.getElementById('nb-tournaments'))">
+        <svg class="game-chip-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="hm1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f59e0b"/><stop offset="100%" style="stop-color:#92400e"/></linearGradient></defs>
+          <ellipse cx="50" cy="62" rx="36" ry="16" fill="url(#hm1)"/>
+          <path d="M16 55 Q14 40 20 28 Q28 15 50 14 Q72 15 80 28 Q86 40 84 55 Z" fill="url(#hm1)" stroke="#fbbf24" stroke-width="1.5"/>
+          <path d="M24 55 Q22 42 28 32 Q36 20 50 20 Q64 20 72 32 Q78 42 76 55 Z" fill="#1a1a1a" opacity="0.5"/>
+          <path d="M32 48 Q32 38 50 36 Q68 38 68 48" fill="none" stroke="#fbbf24" stroke-width="2"/>
+        </svg>
+        <span class="game-chip-name">PUBG MOBILE</span>
+        <span class="game-chip-sub">Battlegrounds</span>
+      </div>
+      <div class="game-chip" onclick="switchTab('tournaments',document.getElementById('nb-tournaments'))">
+        <svg class="game-chip-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="fl1" x1="0%" y1="100%" x2="50%" y2="0%"><stop offset="0%" style="stop-color:#D4001E"/><stop offset="50%" style="stop-color:#f97316"/><stop offset="100%" style="stop-color:#fcd34d"/></linearGradient></defs>
+          <path d="M50 90 C35 80 20 65 25 48 C28 38 35 33 38 25 C40 18 38 10 38 10 C42 16 44 22 48 26 C50 20 50 12 50 12 C53 20 55 28 58 32 C62 28 64 22 64 14 C66 22 68 32 66 42 C70 36 74 28 74 28 C74 42 70 55 64 65 C70 60 76 52 76 52 C74 62 68 72 62 78 C58 82 54 87 50 90Z" fill="url(#fl1)"/>
+          <path d="M50 90 C42 80 35 70 36 58 C37 50 42 45 44 38 C46 44 46 52 50 58 C54 52 54 44 56 38 C58 45 63 50 64 58 C65 70 58 80 50 90Z" fill="rgba(255,255,255,0.25)"/>
+        </svg>
+        <span class="game-chip-name">FREE FIRE</span>
+        <span class="game-chip-sub">Garena</span>
+      </div>
+      <div class="game-chip" onclick="switchTab('tournaments',document.getElementById('nb-tournaments'))">
+        <svg class="game-chip-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="cr1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#06b6d4"/><stop offset="100%" style="stop-color:#1e3a5f"/></linearGradient></defs>
+          <polygon points="50,8 66,26 88,26 76,46 84,68 50,58 16,68 24,46 12,26 34,26" fill="url(#cr1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <polygon points="50,18 62,32 78,32 68,48 74,64 50,54 26,64 32,48 22,32 38,32" fill="rgba(255,255,255,0.12)"/>
+          <path d="M44 46 L46 40 L50 36 L54 40 L56 46 L50 50 Z" fill="#fcd34d" stroke="#f5c400" stroke-width="1"/>
+          <path d="M40 50 L44 46 L50 50 L56 46 L60 50 L50 88 Z" fill="#f5c400" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        </svg>
+        <span class="game-chip-name">CLASH ROYALE</span>
+        <span class="game-chip-sub">Supercell</span>
+      </div>
+    </div>
+
+  </div><!-- /home tab -->
+
+  <!-- ══ TOURNAMENTS TAB ══ -->
+  <div class="tab-content" id="tab-tournaments">
+    <div class="sec-head">
+      <div class="sec-title">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="var(--gold)"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        <span>ALL</span> TOURNAMENTS
+      </div>
+      <button class="btn-host" onclick="openCreate()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/></svg>
+        ORGANISE NEW
+      </button>
+    </div>
+
+    <div class="filter-row">
+      <button class="f-btn active" onclick="filterT('all',this)">ALL</button>
+      <button class="f-btn" onclick="filterT('open',this)">OPEN</button>
+      <button class="f-btn" onclick="filterT('live',this)">LIVE NOW</button>
+      <button class="f-btn" onclick="filterT('upcoming',this)">UPCOMING</button>
+    </div>
+
+    <div class="t-grid" id="t-grid"></div>
+  </div>
+
+  <!-- ══ LIVE TAB ══ -->
+  <div class="tab-content" id="tab-live">
+    <div class="sec-head">
+      <div class="sec-title">
+        <span class="live-pip" style="width:12px;height:12px;background:var(--red);border-radius:50%;display:inline-block;animation:blink 1.5s infinite;"></span>
+        <span>LIVE</span> NOW
+      </div>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--muted)" id="live-count">Loading...</span>
+    </div>
+    <div class="live-grid" id="live-grid"></div>
+  </div>
+
+  <!-- ══ MATCHMAKING TAB ══ -->
+  <div class="tab-content" id="tab-matchmaking">
+    <div class="mm-grid">
+      <div class="mm-box">
+        <div class="mm-ttl">Quick Match <span style="color:var(--red)">●</span></div>
+        <div class="mm-sub">Drop into a ranked game in under 2 minutes. Players across Uganda and East Africa.</div>
+
+        <label class="mm-lbl">Select Your Game</label>
+        <div class="game-sel" id="game-sel">
+          <div class="gopt sel" onclick="pickGame(this,'MLBB')">
+            <svg class="gopt-icon" viewBox="0 0 100 100"><defs><linearGradient id="g-s1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C400"/><stop offset="100%" style="stop-color:#D4001E"/></linearGradient></defs><path d="M35 15 L45 25 L35 45 L20 50 L35 55 L45 75 L50 90 L55 75 L65 55 L80 50 L65 45 L55 25 L65 15 L50 10 Z" fill="url(#g-s1)"/><rect x="46" y="8" width="8" height="84" rx="4" fill="url(#g-s1)" opacity="0.5"/></svg>
+            <div class="gopt-name">MLBB</div>
+          </div>
+          <div class="gopt" onclick="pickGame(this,'EA FC 25')">
+            <svg class="gopt-icon" viewBox="0 0 100 100"><defs><linearGradient id="g-s2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#22c55e"/><stop offset="100%" style="stop-color:#15803d"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#g-s2)" stroke="white" stroke-width="3"/><path d="M50 10 C30 20 20 40 22 55 C24 70 35 80 50 85 C65 80 76 70 78 55 C80 40 70 20 50 10Z" fill="none" stroke="white" stroke-width="2.5"/><path d="M22 55 Q36 60 50 55 Q64 60 78 55" fill="none" stroke="white" stroke-width="2.5"/></svg>
+            <div class="gopt-name">EA FC 25</div>
+          </div>
+          <div class="gopt" onclick="pickGame(this,'COD Mobile')">
+            <svg class="gopt-icon" viewBox="0 0 100 100"><defs><linearGradient id="g-s3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ef4444"/><stop offset="100%" style="stop-color:#7f1d1d"/></linearGradient></defs><rect x="10" y="40" width="65" height="22" rx="6" fill="url(#g-s3)"/><rect x="70" y="44" width="20" height="14" rx="3" fill="#b91c1c"/><circle cx="50" cy="51" r="5" fill="none" stroke="#fca5a5" stroke-width="2.5"/><line x1="50" y1="39" x2="50" y2="44" stroke="#fca5a5" stroke-width="2.5"/><line x1="50" y1="58" x2="50" y2="63" stroke="#fca5a5" stroke-width="2.5"/><line x1="38" y1="51" x2="43" y2="51" stroke="#fca5a5" stroke-width="2.5"/><line x1="57" y1="51" x2="62" y2="51" stroke="#fca5a5" stroke-width="2.5"/></svg>
+            <div class="gopt-name">COD MOBILE</div>
+          </div>
+          <div class="gopt" onclick="pickGame(this,'PUBG Mobile')">
+            <svg class="gopt-icon" viewBox="0 0 100 100"><defs><linearGradient id="g-s4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f59e0b"/><stop offset="100%" style="stop-color:#92400e"/></linearGradient></defs><ellipse cx="50" cy="62" rx="36" ry="16" fill="url(#g-s4)"/><path d="M16 55 Q14 40 20 28 Q28 15 50 14 Q72 15 80 28 Q86 40 84 55 Z" fill="url(#g-s4)" stroke="#fbbf24" stroke-width="1.5"/><path d="M24 55 Q22 42 28 32 Q36 20 50 20 Q64 20 72 32 Q78 42 76 55 Z" fill="rgba(0,0,0,0.4)"/></svg>
+            <div class="gopt-name">PUBG MOBILE</div>
+          </div>
+          <div class="gopt" onclick="pickGame(this,'Free Fire')">
+            <svg class="gopt-icon" viewBox="0 0 100 100"><defs><linearGradient id="g-s5" x1="0%" y1="100%" x2="50%" y2="0%"><stop offset="0%" style="stop-color:#D4001E"/><stop offset="50%" style="stop-color:#f97316"/><stop offset="100%" style="stop-color:#fcd34d"/></linearGradient></defs><path d="M50 90 C35 80 20 65 25 48 C28 38 35 33 38 25 C40 18 38 10 38 10 C42 16 44 22 48 26 C50 20 50 12 50 12 C53 20 55 28 58 32 C62 28 64 22 64 14 C66 22 68 32 66 42 C70 36 74 28 74 28 C74 42 70 55 64 65 C70 60 76 52 76 52 C74 62 68 72 62 78 C58 82 54 87 50 90Z" fill="url(#g-s5)"/></svg>
+            <div class="gopt-name">FREE FIRE</div>
+          </div>
+          <div class="gopt" onclick="pickGame(this,'Clash Royale')">
+            <svg class="gopt-icon" viewBox="0 0 100 100"><defs><linearGradient id="g-s6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#06b6d4"/><stop offset="100%" style="stop-color:#1e3a5f"/></linearGradient></defs><polygon points="50,8 66,26 88,26 76,46 84,68 50,58 16,68 24,46 12,26 34,26" fill="url(#g-s6)"/><path d="M44 46 L46 40 L50 36 L54 40 L56 46 L50 50 Z" fill="#fcd34d"/><path d="M40 50 L44 46 L50 50 L56 46 L60 50 L50 88 Z" fill="#f5c400"/></svg>
+            <div class="gopt-name">CLASH ROYALE</div>
+          </div>
+        </div>
+
+        <label class="mm-lbl">Your In-Game Name</label>
+        <input class="mm-input" type="text" id="mm-ign" placeholder="e.g. Crane_KLA #54321">
+
+        <label class="mm-lbl">City / Region</label>
+        <select class="mm-select" id="mm-city">
+          <option>Kampala</option><option>Entebbe</option><option>Jinja</option>
+          <option>Mbarara</option><option>Gulu</option><option>Masaka</option>
+          <option>Fort Portal</option><option>Nairobi (KE)</option><option>Kigali (RW)</option>
+        </select>
+
+        <label class="mm-lbl">Skill Level</label>
+        <select class="mm-select" id="mm-skill">
+          <option>Beginner (Rookie)</option><option>Amateur</option>
+          <option>Semi-Pro</option><option>Pro</option><option>Elite / Grand Master</option>
+        </select>
+
+        <label class="mm-lbl">Match Type</label>
+        <select class="mm-select" id="mm-type">
+          <option>Casual 1v1</option><option>Ranked 1v1</option>
+          <option>5v5 Team</option><option>Wager Match (UGX)</option>
+        </select>
+
+        <button class="btn-queue" onclick="joinQueue()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+          FIND MATCH
+        </button>
+
+        <div class="queue-box" id="queue-box">
+          <div class="q-lbl">SEARCHING FOR OPPONENT...</div>
+          <div class="q-timer" id="q-timer">0:00</div>
+          <div class="q-players" id="q-players">8 players in queue</div>
+          <button class="btn-cancel" onclick="cancelQ()">CANCEL</button>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="mm-box">
+        <div class="mm-ttl" style="margin-bottom:20px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--gold)" style="vertical-align:middle;margin-right:8px;"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+          LEADERBOARD
+        </div>
+        <div id="lb-list"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+</div><!-- /main -->
+
+<!-- ══ FOOTER ══ -->
+<div class="flag-stripe"></div>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">UGARENA</div>
+      <div class="footer-sub">Uganda's Home of Esports · Kampala 🇺🇬</div>
+    </div>
+    <div class="footer-right">
+      Built with pride in the Pearl of Africa<br>
+      <b>© 2025 UGArena</b>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ REGISTRATION MODAL ══ -->
+<div class="overlay" id="reg-overlay" onclick="if(event.target===this)closeReg()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeReg()">&times;</button>
+    <div class="modal-ttl">Join Tournament</div>
+    <div class="modal-sub" id="reg-t-name">Tournament Name</div>
+
+    <div class="steps">
+      <div class="sdot active" id="sd1">1</div>
+      <div class="sline" id="sl1"></div>
+      <div class="sdot" id="sd2">2</div>
+      <div class="sline" id="sl2"></div>
+      <div class="sdot" id="sd3">3</div>
+    </div>
+
+    <!-- Step 1: Rules -->
+    <div class="reg-step active" id="rs1">
+      <div style="font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;margin-bottom:16px;">Tournament Rules</div>
+      <div class="rules-box">
+        <p>🚫 No cheating, scripting, or account sharing</p>
+        <p>💬 Discord is mandatory for all communications</p>
+        <p>⏰ Check in 15 minutes before start time</p>
+        <p>📱 Stable data connection required (MTN/Airtel recommended)</p>
+        <p>🤝 Zero tolerance for toxicity — respect all opponents</p>
+        <p>📸 Screenshot match result and post to Discord admin</p>
+        <p>⚖️ Admin decisions are final — no disputes after 24 hours</p>
+        <p class="rules-highlight">🏆 Prize paid via MTN Mobile Money within 24hrs of tournament end</p>
+      </div>
+      <label class="form-check">
+        <input type="checkbox" id="rules-check" onchange="toggleRules()">
+        I have read and agree to all tournament rules
+      </label>
+      <button class="btn-mgo" id="rules-go" disabled onclick="goStep(2)" style="width:100%;padding:16px;">CONTINUE →</button>
+    </div>
+
+    <!-- Step 2: Details -->
+    <div class="reg-step" id="rs2">
+      <div style="font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;margin-bottom:20px;">Your Gamer Details</div>
+      <label class="flbl">In-Game Name / ID <span style="color:var(--red)">*</span></label>
+      <input class="finput" id="reg-ign" type="text" placeholder="e.g. Crane_KLA #12345" oninput="checkReg()">
+      <label class="flbl">Discord Tag <span style="color:var(--red)">*</span></label>
+      <input class="finput" id="reg-discord" type="text" placeholder="yourname#1234 or @username" oninput="checkReg()">
+      <label class="flbl">MTN / Airtel MoMo Number (for prize)</label>
+      <input class="finput" id="reg-momo" type="text" placeholder="+256 7XX XXX XXX">
+      <div class="fgrid">
+        <div>
+          <label class="flbl">Team Name</label>
+          <input class="finput" id="reg-team" type="text" placeholder="Solo or Team Name">
+        </div>
+        <div>
+          <label class="flbl">Your City</label>
+          <select class="fselect" id="reg-city">
+            <option>Kampala</option><option>Entebbe</option><option>Jinja</option>
+            <option>Mbarara</option><option>Gulu</option><option>Masaka</option>
+            <option>Fort Portal</option><option>Other Uganda</option><option>East Africa</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-mback" onclick="goStep(1)">← BACK</button>
+        <button class="btn-mgo" id="reg-go" disabled onclick="goStep(3)">REGISTER →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Success -->
+    <div class="reg-step" id="rs3">
+      <div class="success">
+        <div class="success-icon">
+          <svg width="96" height="96" viewBox="0 0 100 100"><defs><linearGradient id="suc1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C400"/><stop offset="100%" style="stop-color:#D4001E"/></linearGradient></defs><circle cx="50" cy="50" r="46" fill="url(#suc1)" opacity="0.15" stroke="url(#suc1)" stroke-width="3"/><path d="M28 50 L42 64 L72 36" stroke="#F5C400" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </div>
+        <div class="success-ttl">Omukwano, You're In!</div>
+        <div class="success-msg">Registration confirmed. Discord notification incoming when brackets drop.</div>
+        <div class="success-sub">Go to: Profile → My Tournaments</div>
+        <div class="momo-box">
+          <div class="momo-lbl">Prize Payout</div>
+          <div class="momo-val">Winner receives prize via <strong style="color:var(--gold)">MTN Mobile Money</strong> within 24 hours of the tournament final.</div>
+        </div>
+        <button class="btn-success" onclick="closeReg()">AWESOME — CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CREATE TOURNAMENT MODAL ══ -->
+<div class="overlay" id="create-overlay" onclick="if(event.target===this)closeCreate()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCreate()">&times;</button>
+    <div class="modal-ttl">Host a Tournament</div>
+    <div class="modal-sub">Set it up. They will come.</div>
+
+    <label class="flbl">Tournament Name <span style="color:var(--red)">*</span></label>
+    <input class="finput" id="ct-name" type="text" placeholder="e.g. Kampala MLBB Open 2025">
+    <div class="fgrid">
+      <div>
+        <label class="flbl">Game <span style="color:var(--red)">*</span></label>
+        <select class="fselect" id="ct-game">
+          <option>Mobile Legends (MLBB)</option><option>EA Sports FC 25</option>
+          <option>COD Mobile</option><option>PUBG Mobile</option>
+          <option>Free Fire</option><option>Clash Royale</option><option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label class="flbl">Format</label>
+        <select class="fselect" id="ct-format">
+          <option>1v1 Single Elim</option><option>1v1 Double Elim</option>
+          <option>5v5 Team</option><option>Round Robin</option><option>Battle Royale</option>
+        </select>
+      </div>
+    </div>
+    <div class="fgrid">
+      <div>
+        <label class="flbl">Max Players</label>
+        <select class="fselect" id="ct-slots"><option>8</option><option>16</option><option>32</option><option>64</option><option>128</option></select>
+      </div>
+      <div>
+        <label class="flbl">Entry Fee (UGX)</label>
+        <input class="finput" id="ct-fee" type="number" placeholder="0 for free" min="0">
+      </div>
+    </div>
+    <div class="fgrid">
+      <div>
+        <label class="flbl">Date</label>
+        <input class="finput" id="ct-date" type="date">
+      </div>
+      <div>
+        <label class="flbl">Start Time</label>
+        <input class="finput" id="ct-time" type="time">
+      </div>
+    </div>
+    <label class="flbl">City / Location</label>
+    <select class="fselect" id="ct-loc">
+      <option>Kampala (Online)</option><option>Entebbe</option><option>Jinja</option>
+      <option>Mbarara</option><option>Gulu</option><option>Uganda-wide (Online)</option>
+      <option>East Africa (Online)</option><option>Global (Online)</option>
+    </select>
+    <label class="flbl">Prize Pool Description</label>
+    <input class="finput" id="ct-prize" type="text" placeholder="e.g. 150,000 UGX to winner via MoMo">
+    <label class="flbl">Discord Server Link</label>
+    <input class="finput" id="ct-discord" type="text" placeholder="https://discord.gg/...">
+
+    <div class="modal-btns">
+      <button class="btn-mback" onclick="closeCreate()">CANCEL</button>
+      <button class="btn-mgo" onclick="submitCreate()">CREATE TOURNAMENT</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LIVE STREAM MODAL ══ -->
+<div class="overlay" id="live-overlay" onclick="if(event.target===this)closeLive()">
+  <div class="modal" style="max-width:560px;">
+    <button class="modal-close" onclick="closeLive()">&times;</button>
+    <div style="border-radius:14px;overflow:hidden;height:260px;position:relative;margin-bottom:22px;">
+      <img id="lm-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.7)">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,6,0.9),transparent 50%)"></div>
+      <div style="position:absolute;top:14px;left:14px;background:var(--red);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:2px;padding:6px 14px;border-radius:100px;animation:blink 2s infinite;">● LIVE</div>
+      <div style="position:absolute;bottom:14px;right:14px;background:rgba(0,0,0,0.82);border:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:14px;padding:6px 14px;border-radius:100px;" id="lm-viewers">0 watching</div>
+    </div>
+    <div class="modal-ttl" id="lm-title">Stream</div>
+    <div style="display:flex;gap:18px;margin:10px 0 20px;flex-wrap:wrap;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--gold);" id="lm-game"></div>
+      <div style="font-size:15px;color:var(--muted);" id="lm-loc"></div>
+    </div>
+    <a id="lm-link" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:var(--red);color:#fff;padding:14px 28px;border-radius:12px;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;text-decoration:none;transition:all 0.2s;"
+       onmouseover="this.style.background='#ff1a3d'" onmouseout="this.style.background='var(--red)'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      WATCH STREAM
+    </a>
+  </div>
+</div>
+
+<script>
+// ─── SVG ICON STRINGS ───────────────────────────────────────
+const ICONS = {
+  mlbb:  `<svg viewBox="0 0 100 100" width="100%" height="100%"><defs><linearGradient id="ti-m" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C400"/><stop offset="100%" style="stop-color:#D4001E"/></linearGradient></defs><path d="M35 15 L45 25 L35 45 L20 50 L35 55 L45 75 L50 90 L55 75 L65 55 L80 50 L65 45 L55 25 L65 15 L50 10 Z" fill="url(#ti-m)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><rect x="46" y="8" width="8" height="84" rx="4" fill="url(#ti-m)" opacity="0.5"/><ellipse cx="50" cy="8" rx="6" ry="4" fill="#F5C400"/></svg>`,
+  eafc:  `<svg viewBox="0 0 100 100" width="100%" height="100%"><defs><linearGradient id="ti-e" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#22c55e"/><stop offset="100%" style="stop-color:#15803d"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#ti-e)" stroke="white" stroke-width="3"/><path d="M50 10 C30 20 20 40 22 55 C24 70 35 80 50 85 C65 80 76 70 78 55 C80 40 70 20 50 10Z" fill="none" stroke="white" stroke-width="2.5"/><path d="M22 55 Q36 60 50 55 Q64 60 78 55" fill="none" stroke="white" stroke-width="2.5"/><path d="M36 12 Q40 30 38 55 Q40 72 45 85" fill="none" stroke="white" stroke-width="2.5"/><path d="M64 12 Q60 30 62 55 Q60 72 55 85" fill="none" stroke="white" stroke-width="2.5"/></svg>`,
+  codm:  `<svg viewBox="0 0 100 100" width="100%" height="100%"><defs><linearGradient id="ti-c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ef4444"/><stop offset="100%" style="stop-color:#7f1d1d"/></linearGradient></defs><rect x="10" y="40" width="65" height="22" rx="6" fill="url(#ti-c)"/><rect x="70" y="44" width="20" height="14" rx="3" fill="#b91c1c"/><rect x="8" y="43" width="12" height="16" rx="4" fill="#dc2626"/><circle cx="50" cy="51" r="6" fill="none" stroke="#fca5a5" stroke-width="2.5"/><line x1="50" y1="39" x2="50" y2="43" stroke="#fca5a5" stroke-width="2.5"/><line x1="50" y1="59" x2="50" y2="63" stroke="#fca5a5" stroke-width="2.5"/><line x1="38" y1="51" x2="42" y2="51" stroke="#fca5a5" stroke-width="2.5"/><line x1="58" y1="51" x2="62" y2="51" stroke="#fca5a5" stroke-width="2.5"/></svg>`,
+  pubg:  `<svg viewBox="0 0 100 100" width="100%" height="100%"><defs><linearGradient id="ti-p" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f59e0b"/><stop offset="100%" style="stop-color:#92400e"/></linearGradient></defs><ellipse cx="50" cy="62" rx="36" ry="16" fill="url(#ti-p)"/><path d="M16 55 Q14 40 20 28 Q28 15 50 14 Q72 15 80 28 Q86 40 84 55 Z" fill="url(#ti-p)" stroke="#fbbf24" stroke-width="1.5"/><path d="M24 55 Q22 42 28 32 Q36 20 50 20 Q64 20 72 32 Q78 42 76 55 Z" fill="rgba(0,0,0,0.4)"/><path d="M34 46 Q34 36 50 34 Q66 36 66 46" fill="none" stroke="#fbbf24" stroke-width="2"/></svg>`,
+  ff:    `<svg viewBox="0 0 100 100" width="100%" height="100%"><defs><linearGradient id="ti-f" x1="0%" y1="100%" x2="50%" y2="0%"><stop offset="0%" style="stop-color:#D4001E"/><stop offset="50%" style="stop-color:#f97316"/><stop offset="100%" style="stop-color:#fcd34d"/></linearGradient></defs><path d="M50 90 C35 80 20 65 25 48 C28 38 35 33 38 25 C40 18 38 10 38 10 C42 16 44 22 48 26 C50 20 50 12 50 12 C53 20 55 28 58 32 C62 28 64 22 64 14 C66 22 68 32 66 42 C70 36 74 28 74 28 C74 42 70 55 64 65 C70 60 76 52 76 52 C74 62 68 72 62 78 C58 82 54 87 50 90Z" fill="url(#ti-f)"/><path d="M50 90 C42 80 35 70 36 58 C37 50 42 45 44 38 C46 44 46 52 50 58 C54 52 54 44 56 38 C58 45 63 50 64 58 C65 70 58 80 50 90Z" fill="rgba(255,255,255,0.2)"/></svg>`,
+  clash: `<svg viewBox="0 0 100 100" width="100%" height="100%"><defs><linearGradient id="ti-cr" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#06b6d4"/><stop offset="100%" style="stop-color:#1e3a5f"/></linearGradient></defs><polygon points="50,8 66,26 88,26 76,46 84,68 50,58 16,68 24,46 12,26 34,26" fill="url(#ti-cr)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><polygon points="50,18 62,32 78,32 68,48 74,64 50,54 26,64 32,48 22,32 38,32" fill="rgba(255,255,255,0.1)"/><path d="M44 46 L46 40 L50 36 L54 40 L56 46 L50 50 Z" fill="#fcd34d" stroke="#f5c400" stroke-width="1"/><path d="M40 50 L44 46 L50 50 L56 46 L60 50 L50 88 Z" fill="#f5c400"/></svg>`,
+};
+
+// ─── STOCK PHOTO URLS ──────────────────────────────────────
+const PHOTOS = {
+  hero:  'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
+  mlbb:  'https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=800&q=80',
+  eafc:  'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80',
+  codm:  'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80',
+  pubg:  'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=800&q=80',
+  ff:    'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=800&q=80',
+  clash: 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=800&q=80',
+  esports1: 'https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?auto=format&fit=crop&w=800&q=80',
+  esports2: 'https://images.unsplash.com/photo-1598550476439-6847785fcea6?auto=format&fit=crop&w=800&q=80',
+  esports3: 'https://images.unsplash.com/photo-1519326844852-704caea5679e?auto=format&fit=crop&w=800&q=80',
+};
+
+// Set hero image
+document.querySelector('.hero-bg').style.backgroundImage = `url('${PHOTOS.hero}')`;
+
+// ─── DATA ────────────────────────────────────────────────
+const GAMES_MAP = {
+  mlbb:  { label:'Mobile Legends', photo: PHOTOS.mlbb },
+  eafc:  { label:'EA Sports FC 25', photo: PHOTOS.eafc },
+  codm:  { label:'COD Mobile', photo: PHOTOS.codm },
+  pubg:  { label:'PUBG Mobile', photo: PHOTOS.pubg },
+  ff:    { label:'Free Fire', photo: PHOTOS.ff },
+  clash: { label:'Clash Royale', photo: PHOTOS.clash },
+};
+
+let tournaments = [
+  { id:1, game:'mlbb',  title:'Kampala MLBB Open', slots:32, filled:28, status:'open',     prize:'150,000 UGX', loc:'Kampala',       date:'Today 6PM',   org:'ProGamer_KLA',   photo: PHOTOS.mlbb },
+  { id:2, game:'eafc',  title:'Pearl of Africa FC Cup', slots:16, filled:16, status:'live', prize:'200,000 UGX', loc:'Entebbe',       date:'LIVE NOW',    org:'JinjaGoals',     photo: PHOTOS.eafc },
+  { id:3, game:'codm',  title:'Owino Street COD Showdown', slots:64, filled:41, status:'open', prize:'300,000 UGX', loc:'Kampala',    date:'Tomorrow 8PM',org:'OwenMW_UG',      photo: PHOTOS.codm },
+  { id:4, game:'pubg',  title:'Nile PUBG Invitational', slots:32, filled:32, status:'live', prize:'500,000 UGX', loc:'Jinja',         date:'LIVE NOW',    org:'JinjaSquad',     photo: PHOTOS.pubg },
+  { id:5, game:'ff',    title:'Mbarara Free Fire League', slots:16, filled:9, status:'open', prize:'100,000 UGX', loc:'Mbarara',      date:'Sat 4PM',     org:'MbaraElite',     photo: PHOTOS.ff },
+  { id:6, game:'clash', title:'Gulu Clash Challenge', slots:16, filled:3, status:'upcoming', prize:'75,000 UGX', loc:'Gulu',          date:'Sun 3PM',     org:'GuloDude',       photo: PHOTOS.clash },
+  { id:7, game:'mlbb',  title:'East Africa MLBB Masters', slots:64, filled:48, status:'open', prize:'1,000,000 UGX', loc:'Online EA', date:'Next Week',   org:'EAMasters',      photo: PHOTOS.esports1 },
+  { id:8, game:'eafc',  title:'Kampala Premier FC League', slots:32, filled:32, status:'live', prize:'250,000 UGX', loc:'Kampala',    date:'LIVE NOW',    org:'KamFC_Pro',      photo: PHOTOS.eafc },
+  { id:9, game:'codm',  title:'Mbarara Night Ops', slots:32, filled:17, status:'open',      prize:'180,000 UGX', loc:'Mbarara',       date:'Fri 9PM',     org:'NightOps_UG',    photo: PHOTOS.codm },
+];
+
+const streams = [
+  { id:1, game:'mlbb',  streamer:'CraneKing_UG',   title:'Road to Mythical Glory | MLBB KLA',       loc:'Kampala',  viewers:1240, link:'#', photo: PHOTOS.esports1 },
+  { id:2, game:'eafc',  streamer:'GoalMachineJJ',  title:'Pearl of Africa FC Cup – Semi Finals',     loc:'Jinja',    viewers:892,  link:'#', photo: PHOTOS.eafc },
+  { id:3, game:'codm',  streamer:'OwenMW_UG',      title:'Ranked Grind | COD Mobile Uganda',         loc:'Kampala',  viewers:654,  link:'#', photo: PHOTOS.codm },
+  { id:4, game:'pubg',  streamer:'NileRider_PUBG', title:'Nile Invitational LIVE Broadcast',         loc:'Jinja',    viewers:3200, link:'#', photo: PHOTOS.esports2 },
+  { id:5, game:'ff',    streamer:'FreeFire_KLA',   title:'Free Fire UG Qualifiers',                  loc:'Kampala',  viewers:430,  link:'#', photo: PHOTOS.ff },
+  { id:6, game:'mlbb',  streamer:'Masaka_Warrior', title:'Climbing to Legend | Solo Queue',          loc:'Masaka',   viewers:287,  link:'#', photo: PHOTOS.esports3 },
+];
+
+const lbData = [
+  { rank:1, name:'CraneKing_UG',  city:'Kampala',    pts:4820, init:'CK', color:'#F5C400' },
+  { rank:2, name:'GoalMachine88', city:'Jinja',      pts:3990, init:'GM', color:'#ef4444' },
+  { rank:3, name:'NileRider_Pro', city:'Jinja',      pts:3460, init:'NR', color:'#8b5cf6' },
+  { rank:4, name:'Ronnie254',     city:'Kampala',    pts:1420, init:'RN', color:'#22c55e' },
+  { rank:5, name:'MbaraElite',    city:'Mbarara',    pts:1290, init:'ME', color:'#f59e0b' },
+  { rank:6, name:'GuloDude99',    city:'Gulu',       pts:1105, init:'GD', color:'#06b6d4' },
+  { rank:7, name:'FortPortalFC',  city:'Fort Portal',pts:980,  init:'FP', color:'#ec4899' },
+  { rank:8, name:'EntebbeBoss',   city:'Entebbe',    pts:875,  init:'EB', color:'#14b8a6' },
+];
+
+// ─── RENDER ──────────────────────────────────────────────
+let curFilter = 'all', selGame = 'MLBB', qInterval = null, qSec = 0;
+
+function renderTournaments(f='all') {
+  const list = f==='all' ? tournaments : tournaments.filter(t => t.status===f);
+  document.getElementById('t-grid').innerHTML = list.map(t => {
+    const fill = Math.round(t.filled/t.slots*100);
+    const isFull = t.filled >= t.slots;
+    const sClass = t.status==='live' ? 's-live' : t.status==='open' ? 's-open' : 's-upcoming';
+    const sLabel = t.status==='live' ? '● LIVE' : t.status==='open' ? '● OPEN' : '⏳ UPCOMING';
+    const joinCls = t.status==='live' ? 'watch' : (isFull ? 'full' : '');
+    const joinLabel = t.status==='live'
+      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> WATCH LIVE`
+      : isFull ? '🔒 REGISTRATION FULL' : `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 17l5-5-5-5v10z"/></svg> JOIN NOW`;
+    const clickFn = t.status==='live' ? `watchT(${t.id})` : isFull ? '' : `openReg(${t.id})`;
+
+    return `
+      <div class="t-card">
+        <div class="t-banner">
+          <img src="${t.photo}" alt="${t.title}" onerror="this.src='${PHOTOS.esports1}'">
+          <div class="t-banner-overlay"></div>
+          <svg class="t-banner-icon" viewBox="0 0 100 100">${ICONS[t.game] ? '' : ''}</svg>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;">
+            <div style="width:72px;height:72px;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.8));">${ICONS[t.game]||''}</div>
+          </div>
+          <div class="t-status ${sClass}">${sLabel}</div>
+          <div class="t-prize">🏆 ${t.prize}</div>
+        </div>
+        <div class="t-body">
+          <div class="t-game-tag">${GAMES_MAP[t.game]?.label || t.game}</div>
+          <div class="t-name">${t.title}</div>
+          <div class="t-meta">
+            <div class="t-meta-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              ${t.loc}
+            </div>
+            <div class="t-meta-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+              ${t.date}
+            </div>
+            <div class="t-meta-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              ${t.org}
+            </div>
+          </div>
+          <div class="prog-track"><div class="prog-fill" style="width:${fill}%"></div></div>
+          <div class="prog-lbl">${t.filled} / ${t.slots} players registered</div>
+          <button class="btn-join ${joinCls}" onclick="${clickFn}" ${isFull && t.status!=='live' ? 'disabled':''}>
+            ${joinLabel}
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderLive() {
+  document.getElementById('live-count').textContent = `${streams.length} channels streaming`;
+  document.getElementById('live-grid').innerHTML = streams.map(s => `
+    <div class="live-card" onclick="openLive(${s.id})">
+      <div class="live-thumb">
+        <img src="${s.photo}" alt="${s.title}" onerror="this.src='${PHOTOS.esports1}'">
+        <div class="live-badge-overlay">● LIVE</div>
+        <div class="live-viewers">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+          ${s.viewers.toLocaleString()}
+        </div>
+      </div>
+      <div class="live-body">
+        <div class="live-streamer">${s.streamer}</div>
+        <div class="live-ttl">${s.title}</div>
+        <div class="live-meta">
+          <span class="live-meta-g">${(GAMES_MAP[s.game]?.label||s.game).toUpperCase()}</span>
+          <span class="live-meta-l">📍 ${s.loc}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderLB() {
+  document.getElementById('lb-list').innerHTML = lbData.map(p => {
+    const rc = p.rank===1?'g':p.rank===2?'s':p.rank===3?'b':'';
+    const medal = p.rank<=3 ? ['🥇','🥈','🥉'][p.rank-1] : p.rank;
+    return `
+      <div class="lb-row">
+        <div class="lb-rank ${rc}">${medal}</div>
+        <div class="lb-avi" style="background:${p.color}">${p.init}</div>
+        <div class="lb-info">
+          <div class="lb-name">${p.name}</div>
+          <div class="lb-city">📍 ${p.city}</div>
+        </div>
+        <div class="lb-pts">${p.pts.toLocaleString()} pts</div>
+      </div>`;
+  }).join('');
+}
+
+// ─── TAB SWITCHING ───────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ─── FILTER ──────────────────────────────────────────────
+function filterT(f, btn) {
+  curFilter = f;
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTournaments(f);
+}
+
+// ─── REG MODAL ───────────────────────────────────────────
+let activeRegId = null;
+function openReg(id) {
+  const t = tournaments.find(x => x.id===id);
+  if (!t) return;
+  activeRegId = id;
+  document.getElementById('reg-t-name').textContent = t.title + ' — ' + t.prize;
+  document.getElementById('rules-check').checked = false;
+  document.getElementById('rules-go').disabled = true;
+  document.getElementById('reg-ign').value = '';
+  document.getElementById('reg-discord').value = '';
+  document.getElementById('reg-go').disabled = true;
+  goStep(1);
+  document.getElementById('reg-overlay').classList.add('open');
+}
+function closeReg() { document.getElementById('reg-overlay').classList.remove('open'); }
+
+function goStep(n) {
+  ['rs1','rs2','rs3'].forEach((id,i) => {
+    document.getElementById(id).classList.toggle('active', i+1===n);
+  });
+  [1,2,3].forEach(i => {
+    const d = document.getElementById('sd'+i);
+    d.classList.remove('active','done');
+    if (i<n) { d.classList.add('done'); d.textContent='✓'; }
+    if (i===n) { d.classList.add('active'); d.textContent=i; }
+    if (i>n) d.textContent=i;
+  });
+  [1,2].forEach(i => document.getElementById('sl'+i).classList.toggle('done',i<n));
+}
+
+function toggleRules() {
+  const c = document.getElementById('rules-check').checked;
+  document.getElementById('rules-go').disabled = !c;
+}
+function checkReg() {
+  const a = document.getElementById('reg-ign').value.trim().length > 2;
+  const b = document.getElementById('reg-discord').value.trim().length > 3;
+  document.getElementById('reg-go').disabled = !(a && b);
+}
+
+// ─── CREATE MODAL ────────────────────────────────────────
+function openCreate() { document.getElementById('create-overlay').classList.add('open'); }
+function closeCreate() { document.getElementById('create-overlay').classList.remove('open'); }
+
+function submitCreate() {
+  const name = document.getElementById('ct-name').value.trim();
+  if (!name) { alert('Please enter a tournament name!'); return; }
+  const gameRaw = document.getElementById('ct-game').value;
+  const gKey = Object.entries(GAMES_MAP).find(([k,v])=>v.label===gameRaw||gameRaw.includes(v.label.split(' ')[0]))?.[0]||'mlbb';
+  const slots = parseInt(document.getElementById('ct-slots').value);
+  const prize = document.getElementById('ct-prize').value || 'TBD';
+  const loc = document.getElementById('ct-loc').value;
+  const date = document.getElementById('ct-date').value;
+  const time = document.getElementById('ct-time').value;
+  tournaments.unshift({ id:Date.now(), game:gKey, title:name, slots, filled:0, status:'upcoming', prize, loc, date: date&&time?`${date} ${time}`:'TBD', org:'Ronnie254', photo:GAMES_MAP[gKey]?.photo||PHOTOS.esports1 });
+  closeCreate();
+  switchTab('tournaments',document.getElementById('nb-tournaments'));
+  renderTournaments(curFilter);
+  ['ct-name','ct-fee','ct-prize','ct-discord'].forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
+}
+
+// ─── LIVE MODAL ──────────────────────────────────────────
+function openLive(id) {
+  const s = streams.find(x => x.id===id); if(!s) return;
+  document.getElementById('lm-img').src = s.photo;
+  document.getElementById('lm-title').textContent = s.title;
+  document.getElementById('lm-game').textContent = (GAMES_MAP[s.game]?.label||s.game).toUpperCase();
+  document.getElementById('lm-loc').textContent = '📍 ' + s.loc;
+  document.getElementById('lm-viewers').textContent = '👁 ' + s.viewers.toLocaleString() + ' watching';
+  document.getElementById('lm-link').href = s.link;
+  document.getElementById('live-overlay').classList.add('open');
+}
+function closeLive() { document.getElementById('live-overlay').classList.remove('open'); }
+
+function watchT(id) {
+  const t = tournaments.find(x => x.id===id); if(!t) return;
+  const s = streams.find(s => s.game===t.game) || streams[0];
+  openLive(s.id);
+}
+
+// ─── MATCHMAKING ─────────────────────────────────────────
+function pickGame(el, name) {
+  document.querySelectorAll('.gopt').forEach(g => g.classList.remove('sel'));
+  el.classList.add('sel');
+  selGame = name;
+}
+
+function joinQueue() {
+  const ign = document.getElementById('mm-ign').value.trim();
+  if (!ign) { alert('Enter your in-game name first!'); return; }
+  document.querySelector('.btn-queue').style.display = 'none';
+  const qb = document.getElementById('queue-box');
+  qb.style.display = 'block';
+  qSec = 0;
+  const cnt = Math.floor(Math.random()*18)+5;
+  document.getElementById('q-players').textContent = cnt + ' players in queue';
+  const matchAt = Math.floor(Math.random()*9)+7;
+  qInterval = setInterval(() => {
+    qSec++;
+    const m = Math.floor(qSec/60), s = qSec%60;
+    document.getElementById('q-timer').textContent = m+':'+(s<10?'0':'')+s;
+    if (qSec >= matchAt) {
+      clearInterval(qInterval);
+      const opponents = ['CraneKing_UG','GoalMachine88','NileRider_Pro','MbaraElite','GuloDude99'];
+      const opp = opponents[Math.floor(Math.random()*opponents.length)];
+      qb.innerHTML = `
+        <div style="margin-bottom:14px;">
+          <svg width="72" height="72" viewBox="0 0 100 100"><defs><linearGradient id="mf1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F5C400"/><stop offset="100%" style="stop-color:#D4001E"/></linearGradient></defs><circle cx="50" cy="50" r="46" fill="url(#mf1)" opacity="0.2" stroke="url(#mf1)" stroke-width="3"/><path d="M30 50l16 16 24-24" stroke="#F5C400" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:28px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">MATCH FOUND!</div>
+        <div style="font-size:18px;color:#aaa;margin-bottom:6px;">Opponent: <strong style="color:var(--text)">${opp}</strong></div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--muted);margin-bottom:20px;">Game: ${selGame} · Kampala</div>
+        <button onclick="cancelQ()" style="background:var(--gold);color:var(--black);border:none;padding:14px 32px;border-radius:12px;cursor:pointer;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;transition:all 0.2s;"
+                onmouseover="this.style.background='#fff'" onmouseout="this.style.background='var(--gold)'">LET'S GO →</button>`;
+    }
+  }, 1000);
+}
+
+function cancelQ() {
+  clearInterval(qInterval);
+  document.getElementById('queue-box').style.display = 'none';
+  const qb = document.getElementById('queue-box');
+  qb.innerHTML = `<div class="q-lbl">SEARCHING FOR OPPONENT...</div><div class="q-timer" id="q-timer">0:00</div><div class="q-players" id="q-players">8 players in queue</div><button class="btn-cancel" onclick="cancelQ()">CANCEL</button>`;
+  document.querySelector('.btn-queue').style.display = 'flex';
+}
+
+// ─── STAT COUNTER ANIMATION ──────────────────────────────
+function animCount(id, to, dur) {
+  const el = document.getElementById(id); if(!el) return;
+  const start = performance.now();
+  (function step(now) {
+    const p = Math.min((now-start)/dur,1);
+    el.textContent = Math.floor(to*(1-Math.pow(1-p,3)));
+    if (p<1) requestAnimationFrame(step);
+  })(start);
+}
+
+// ─── INIT ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderTournaments();
+  renderLive();
+  renderLB();
+  setTimeout(() => { animCount('s-tourn', 47, 1400); animCount('s-matches', 289, 1800); }, 300);
+  setInterval(() => { streams.forEach(s => { s.viewers += Math.floor(Math.random()*8)-3; s.viewers = Math.max(s.viewers, 80); }); }, 6000);
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') { closeReg(); closeCreate(); closeLive(); }
+});
+</script>
+</body>
+</html>
